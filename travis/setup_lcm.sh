@@ -11,7 +11,7 @@ elif [ "$TRAVIS_OS_NAME" = "osx" ]
 	brew install glib pkg-config wget
 else
 	echo "ERROR: TRAVIS_OS_NAME: $TRAVIS_OS_NAME is not handled, not installing LCM"
-	exit(1)
+	exit 1
 fi
 
 wget https://github.com/lcm-proj/lcm/releases/download/v1.3.0/lcm-1.3.0.zip
