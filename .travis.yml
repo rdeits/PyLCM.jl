@@ -15,11 +15,10 @@ notifications:
   email: false
 
 before_install:
-  - pip install codecov
   - travis/setup_lcm.sh
 
 after_success:
-  - codecov
+  - julia -e 'cd(Pkg.dir("PyLCM")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
 
 # uncomment the following lines to override the default test script
 #script:
