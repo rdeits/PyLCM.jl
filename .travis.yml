@@ -16,7 +16,6 @@ notifications:
 
 before_install:
   - travis/setup_lcm.sh
-  - echo $PYTHONPATH
   - export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python2.7/site-packages:`pwd`
   - echo $PYTHONPATH
   - ls

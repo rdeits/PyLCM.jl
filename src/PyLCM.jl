@@ -1,16 +1,18 @@
+__precompile__()
+
 module PyLCM
 
 export LCM, publish, subscribe, handle
+global pylcm
 
 using PyCall
-@pyimport lcm as pylcm
 
 immutable PyLCMWrapper
 	lcm_obj::PyObject
 end
 
 function LCM()
-	PyLCMWrapper(pylcm.LCM())
+	PyLCMWrapper(pylcm[:LCM]())
 end
 
 function publish(lc::PyLCMWrapper, channel::AbstractString, msg)
@@ -27,6 +29,10 @@ end
 
 function handle(lc::PyLCMWrapper)
 	pycall(lc.lcm_obj[:handle], PyObject)
+end
+
+function __init__()
+	global pylcm = pyimport("lcm")
 end
 
 end # module
