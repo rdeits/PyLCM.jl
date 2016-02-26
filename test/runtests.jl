@@ -35,3 +35,23 @@ subscribe(lc, "TEST", handle_msg, exlcm.muldim_array_t)
 publish(lc, "TEST", msg)
 handle(lc)
 @test got_message
+
+global decoded_message = false
+
+function decode_and_handle_msg(channel, msg_data)
+	global decoded_message = true
+	msg = exlcm.muldim_array_t[:decode](msg_data)
+	for i = 1:size(test_data, 1)
+		for j = 1:size(test_data, 2)
+			for k = 1:size(test_data, 3)
+				@test msg[:data][i,j][k] == test_data[i,j,k]
+			end
+		end
+	end
+	@test msg[:strarray] == test_strings
+end
+
+subscribe(lc, "TEST_DECODE", decode_and_handle_msg)
+publish(lc, "TEST_DECODE", msg)
+handle(lc)
+@test decoded_message
