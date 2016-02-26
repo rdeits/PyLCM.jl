@@ -8,6 +8,11 @@ julia:
   - nightly
 notifications:
   email: false
+
+before_install:
+  - travis/setup_lcm.sh
+
+
 # uncomment the following lines to override the default test script
 #script:
 #  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
