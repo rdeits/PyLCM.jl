@@ -15,8 +15,11 @@ notifications:
   email: false
 
 before_install:
+  - pip install codecov
   - travis/setup_lcm.sh
 
+after_success:
+  - codecov
 
 # uncomment the following lines to override the default test script
 #script:
