@@ -7,7 +7,7 @@ if [ "$TRAVIS_OS_NAME" = "linux" ]
 	sudo apt-get install -y build-essential libglib2.0-dev wget
 elif [ "$TRAVIS_OS_NAME" = "osx" ]
 	then
-	brew update
+	brew update > brew_update.log
 	brew install glib pkg-config wget
 else
 	echo "ERROR: TRAVIS_OS_NAME: $TRAVIS_OS_NAME is not handled, not installing LCM"
