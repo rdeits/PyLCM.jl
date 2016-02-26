@@ -16,7 +16,7 @@ fi
 
 wget https://github.com/lcm-proj/lcm/releases/download/v1.3.0/lcm-1.3.0.zip
 unzip lcm-1.3.0.zip
-cd lcm-1.3.0.zip
+cd lcm-1.3.0
 ./configure
 make
 
