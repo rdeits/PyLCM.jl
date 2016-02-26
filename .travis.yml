@@ -16,6 +16,8 @@ notifications:
 
 before_install:
   - travis/setup_lcm.sh
+  - echo $PYTHONPATH
+  - export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python2.7/site-packages
 
 after_success:
   - julia -e 'cd(Pkg.dir("PyLCM")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
