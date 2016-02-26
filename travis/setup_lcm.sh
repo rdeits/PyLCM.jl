@@ -8,7 +8,7 @@ if [ "$TRAVIS_OS_NAME" = "linux" ]
 elif [ "$TRAVIS_OS_NAME" = "osx" ]
 	then
 	brew update > brew_update.log
-	brew install glib pkg-config wget
+	brew install glib
 else
 	echo "ERROR: TRAVIS_OS_NAME: $TRAVIS_OS_NAME is not handled, not installing LCM"
 	exit 1
