@@ -19,7 +19,7 @@ before_install:
   - export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python2.7/site-packages:`pwd`
   - echo $PYTHONPATH
   - python -c "import lcm"
-  - julia -e "using PyCall; @pyimport lcm as pylcm"
+  - julia -e "Pkg.add(\"PyCall\"); using PyCall; @pyimport lcm as pylcm"
   - ls
 
 after_success:
