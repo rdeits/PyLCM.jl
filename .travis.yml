@@ -18,6 +18,7 @@ before_install:
   - travis/setup_lcm.sh
   - export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python2.7/site-packages:`pwd`
   - echo $PYTHONPATH
+  - echo $LD_LIBRARY_PATH
   - python -c "import lcm"
   - julia -e "Pkg.add(\"PyCall\"); using PyCall; @pyimport lcm as pylcm"
   - ls
