@@ -23,7 +23,6 @@ make
 if [ "$TRAVIS_OS_NAME" = "linux" ]
 	then
 	sudo make install
-	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 elif [ "$TRAVIS_OS_NAME" = "osx" ]
 	then
 	make install

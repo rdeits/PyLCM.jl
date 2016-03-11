@@ -16,8 +16,8 @@ notifications:
 
 before_install:
   - travis/setup_lcm.sh
+  - if [ "$TRAVIS_OS_NAME" = "linux" ] ; then export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib ; fi
   - export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python2.7/site-packages:`pwd`
-  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
   - echo $PYTHONPATH
   - echo $LD_LIBRARY_PATH
   - python -c "import lcm"
