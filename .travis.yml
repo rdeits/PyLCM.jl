@@ -60,8 +60,9 @@ before_install:
   - julia -e "Pkg.add(\"PyCall\");"
   - julia -e "using PyCall; @pyimport lcm as pylcm"
 script:
-  - julia -e 'versioninfo(); Pkg.init(); Pkg.clone(pwd()); Pkg.build("PyLCM")'
+  - julia -e 'versioninfo(); Pkg.init();'
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia -e 'Pkg.clone(pwd()); Pkg.build("PyLCM"); Pkg.test("PyLCM"; coverage=true)'
+  - julia -e 'Pkg.clone(pwd()); Pkg.build("PyLCM")'
+  - julia -e 'Pkg.test("PyLCM"; coverage=true)'
 after_success:
   - julia -e 'cd(Pkg.dir("PyCall")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
