@@ -8,6 +8,10 @@ deps = [
 	]
 	# pkgconfig = library_dependency("pkgconfig", aliases = ["pkg-config"])
 
+@linux_only begin
+	append!(deps, [java6 = library_dependency("openjdk-6-jdk")])
+end
+
 @osx_only begin
 	using Homebrew
 	provides(Homebrew.HB, "glib", gobject, os=:Darwin)
@@ -16,6 +20,7 @@ end
 
 provides(AptGet,
 	Dict("libglib2.0-dev" => gobject,
+	     "openjdk-6-jdk" => java6
 	 # "build-essential" => pkgconfig
 	 ))
 
@@ -28,7 +33,7 @@ provides(Sources,
 	Dict(URI("https://github.com/lcm-proj/lcm/releases/download/v1.3.0/lcm-1.3.0.zip") => lcm))
 
 provides(BuildProcess,
-	Dict(Autotools() => lcm))
+	Dict(Autotools(configure_options="--without-java") => lcm))
 
 @BinDeps.install
 
