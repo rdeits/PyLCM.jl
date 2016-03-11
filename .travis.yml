@@ -57,7 +57,8 @@ before_install:
   - echo $PYTHONPATH
   - echo $LD_LIBRARY_PATH
   - python -c "import lcm"
-  - julia -e "Pkg.add(\"PyCall\"); Pkg.checkout(\"PyCall\"); Pkg.build(\"PyCall\"); using PyCall; @pyimport lcm as pylcm"
+  - julia -e "Pkg.add(\"PyCall\");"
+  - julia -e "using PyCall; @pyimport lcm as pylcm"
 script:
   - julia -e 'versioninfo(); Pkg.init(); Pkg.clone(pwd()); Pkg.build("PyLCM")'
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
