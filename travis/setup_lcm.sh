@@ -29,5 +29,5 @@ elif [ "$TRAVIS_OS_NAME" = "osx" ]
 fi
 
 cd ..
-lcm-gen -p lcm-1.3.0/examples/types/multidim_array_t.lcm
+/home/travis/virtualenv/python2.7.10/bin/lcm-gen -p lcm-1.3.0/examples/types/multidim_array_t.lcm
 
