@@ -35,7 +35,7 @@
 
 language: python
 sudo: required
-dist: trusty
+dist: precise
 python:
     - 2.7
 compiler:
