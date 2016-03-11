@@ -4,7 +4,7 @@ using BinDeps
 
 deps = [
 	gobject = library_dependency("gobject", aliases = ["libgobject-2.0-0", "libgobject-2.0"])
-	lcm = library_dependency("lcm", aliases=["liblcm", "liblcm.so.1"])
+	lcm = library_dependency("lcm", aliases=["liblcm", "liblcm.so.1", "liblcm.so.1.3.4"])
 	]
 	# pkgconfig = library_dependency("pkgconfig", aliases = ["pkg-config"])
 
