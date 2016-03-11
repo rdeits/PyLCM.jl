@@ -5,6 +5,10 @@
 
 PyLCM provides an interface to the [Lightweight Communications and Marshalling (LCM) library](https://lcm-proj.github.io/) in Julia. It wraps the LCM Python interface using [PyCall](https://github.com/stevengj/PyCall.jl), so it will be slower than calling the LCM C-API directly.
 
+# Installation
+
+You'll need to install the LCM package (which includes its Python bindings) yourself. Instructions can be found here: <https://lcm-proj.github.io/>
+
 # Usage
 
 ### Constructing the LCM object:
