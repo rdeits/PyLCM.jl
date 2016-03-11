@@ -1,68 +1,64 @@
 # Documentation: http://docs.travis-ci.com/user/languages/julia/
-# language: julia
-# sudo: required
-# dist: trusty
+language: julia
+sudo: required
+dist: precise
 
-# os:
-#   - linux
-#   - osx
+os:
+  - linux
 
-# julia:
-#   - release
-#   - nightly
+julia:
+  - release
+  - nightly
 
-# notifications:
-#   email: false
+notifications:
+  email: false
 
-# before_install:
-#   - travis/setup_lcm.sh
-#   - if [ "$TRAVIS_OS_NAME" = "linux" ] ; then export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib ; fi
-#   - export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python2.7/site-packages:`pwd`
-#   - echo $PYTHONPATH
-#   - echo $LD_LIBRARY_PATH
-#   - python -c "import lcm"
-#   - julia -e "Pkg.add(\"PyCall\"); Pkg.checkout(\"PyCall\"); Pkg.build(\"PyCall\"); using PyCall; @pyimport lcm as pylcm"
-#   - ls
+before_install:
+  - travis/setup_lcm.sh
+  - export PYTHONPATH=$PYTHONPATH:`pwd`
+  - echo $PYTHONPATH
+  - python -c "import lcm"
+  - julia -e "Pkg.add(\"PyCall\"); using PyCall; @pyimport lcm as pylcm"
+  - ls
 
-
-# after_success:
-#   - julia -e 'cd(Pkg.dir("PyLCM")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
+after_success:
+  - julia -e 'cd(Pkg.dir("PyLCM")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
 
 # uncomment the following lines to override the default test script
 #script:
 #  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
 #  - julia -e 'Pkg.clone(pwd()); Pkg.build("PyLCM"); Pkg.test("PyLCM"; coverage=true)'
 
-language: python
-sudo: required
-dist: precise
-python:
-    - 2.7
-compiler:
-  - clang
-env:
-  matrix:
-    - JULIAVERSION="juliareleases"
-    - JULIAVERSION="julianightlies"
-notifications:
-  email: false
-before_install:
-  - sudo add-apt-repository ppa:staticfloat/julia-deps -y
-  - sudo add-apt-repository ppa:staticfloat/${JULIAVERSION} -y
-  - sudo apt-get update -qq -y
-  - sudo apt-get install libpcre3-dev julia -y
-  - sudo apt-get install python-numpy -y
-  - travis/setup_lcm.sh
-  - export PYTHONPATH=$PYTHONPATH:`pwd`
-  - echo $PYTHONPATH
-  - echo $LD_LIBRARY_PATH
-  - python -c "import lcm"
-  - julia -e "Pkg.add(\"PyCall\");"
-  - julia -e "using PyCall; @pyimport lcm as pylcm"
-script:
-  - julia -e 'versioninfo(); Pkg.init();'
-  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia -e 'Pkg.clone(pwd()); Pkg.build("PyLCM")'
-  - julia -e 'Pkg.test("PyLCM"; coverage=true)'
-after_success:
-  - julia -e 'cd(Pkg.dir("PyLCM")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
+# language: python
+# sudo: required
+# dist: precise
+# python:
+#     - 2.7
+# compiler:
+#   - clang
+# env:
+#   matrix:
+#     - JULIAVERSION="juliareleases"
+#     - JULIAVERSION="julianightlies"
+# notifications:
+#   email: false
+# before_install:
+#   - sudo add-apt-repository ppa:staticfloat/julia-deps -y
+#   - sudo add-apt-repository ppa:staticfloat/${JULIAVERSION} -y
+#   - sudo apt-get update -qq -y
+#   - sudo apt-get install libpcre3-dev julia -y
+#   - sudo apt-get install python-numpy -y
+#   - travis/setup_lcm.sh
+#   - export PYTHONPATH=$PYTHONPATH:`pwd`
+#   - echo $PYTHONPATH
+#   - echo $LD_LIBRARY_PATH
+#   - python -c "import lcm"
+#   - julia -e "Pkg.add(\"PyCall\");"
+#   - julia -e "using PyCall; @pyimport lcm as pylcm"
+# script:
+#   - julia -e 'versioninfo(); Pkg.init();'
+#   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+#   - julia -e 'Pkg.clone(pwd()); Pkg.build("PyLCM")'
+#   - julia -e 'Pkg.test("PyLCM"; coverage=true)'
+# after_success:
+#   - julia -e 'cd(Pkg.dir("PyLCM")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
