@@ -17,7 +17,7 @@ fi
 wget https://github.com/lcm-proj/lcm/releases/download/v1.3.0/lcm-1.3.0.zip
 unzip lcm-1.3.0.zip > unzip_lcm.log
 cd lcm-1.3.0
-./configure
+./configure --prefix=/home/travis/virtualenv/python2.7.10
 make
 
 if [ "$TRAVIS_OS_NAME" = "linux" ]
