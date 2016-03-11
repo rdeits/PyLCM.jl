@@ -12,6 +12,9 @@ env:
     - JULIAVERSION="julianightlies"
 notifications:
   email: false
+branches:
+  only:
+    - master
 before_install:
   - sudo add-apt-repository ppa:staticfloat/julia-deps -y
   - sudo add-apt-repository ppa:staticfloat/${JULIAVERSION} -y
