@@ -19,14 +19,7 @@ unzip lcm-1.3.0.zip > unzip_lcm.log
 cd lcm-1.3.0
 ./configure --prefix=$VIRTUAL_ENV
 make
-
-if [ "$TRAVIS_OS_NAME" = "linux" ]
-	then
-	sudo make install
-elif [ "$TRAVIS_OS_NAME" = "osx" ]
-	then
-	make install
-fi
+make install
 
 cd ..
 lcm-gen -p lcm-1.3.0/examples/types/multidim_array_t.lcm
