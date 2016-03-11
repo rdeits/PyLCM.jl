@@ -14,13 +14,12 @@ else
 	exit 1
 fi
 
-wget https://github.com/lcm-proj/lcm/releases/download/v1.3.0/lcm-1.3.0.zip
-unzip lcm-1.3.0.zip > unzip_lcm.log
-cd lcm-1.3.0
-./configure --prefix=$VIRTUAL_ENV
-make
-make install
+# wget https://github.com/lcm-proj/lcm/releases/download/v1.3.0/lcm-1.3.0.zip
+# unzip lcm-1.3.0.zip > unzip_lcm.log
+# cd lcm-1.3.0
+# ./configure --prefix=$VIRTUAL_ENV
+# make
+# make install
 
-cd ..
-lcm-gen -p lcm-1.3.0/examples/types/multidim_array_t.lcm
-
+# cd ..
+lcm-gen -p test/multidim_array_t.lcm
