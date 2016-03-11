@@ -65,4 +65,4 @@ script:
   - julia -e 'Pkg.clone(pwd()); Pkg.build("PyLCM")'
   - julia -e 'Pkg.test("PyLCM"; coverage=true)'
 after_success:
-  - julia -e 'cd(Pkg.dir("PyCall")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
+  - julia -e 'cd(Pkg.dir("PyLCM")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
