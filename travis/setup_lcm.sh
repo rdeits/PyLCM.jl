@@ -4,7 +4,7 @@ if [ "$TRAVIS_OS_NAME" = "linux" ]
 	then
 	sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
 	sudo apt-get update -qq
-	sudo apt-get install -y build-essential libglib2.0-dev python-dev openjdk-6-jdk wget
+	sudo apt-get install -y build-essential libglib2.0-dev python-dev python3-dev openjdk-6-jdk wget
 elif [ "$TRAVIS_OS_NAME" = "osx" ]
 	then
 	brew update > brew_update.log
