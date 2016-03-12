@@ -3,6 +3,7 @@ sudo: required
 dist: precise
 python:
     - 2.7
+    - 3.4
 compiler:
   - clang
 env:
