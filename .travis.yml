@@ -22,7 +22,7 @@ before_install:
   - sudo add-apt-repository ppa:staticfloat/${JULIAVERSION} -y
   - sudo apt-get update -qq -y
   - sudo apt-get install libpcre3-dev julia -y
-  - sudo apt-get install python-numpy -y
+  - sudo apt-get install python3-dev python-numpy -y
 script:
   - julia -e 'versioninfo(); Pkg.init();'
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
