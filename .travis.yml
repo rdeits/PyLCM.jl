@@ -1,6 +1,8 @@
 language: python
 sudo: required
 dist: precise
+os:
+    - linux
 python:
     - 2.7
 compiler:
@@ -11,23 +13,22 @@ env:
     - JULIAVERSION="julianightlies"
 notifications:
   email: false
+branches:
+  only:
+    - master
 before_install:
   - sudo add-apt-repository ppa:staticfloat/julia-deps -y
   - sudo add-apt-repository ppa:staticfloat/${JULIAVERSION} -y
   - sudo apt-get update -qq -y
   - sudo apt-get install libpcre3-dev julia -y
-  - sudo apt-get install python-numpy -y
-  - travis/setup_lcm.sh
-  - export PYTHONPATH=$PYTHONPATH:`pwd`
-  - echo $PYTHONPATH
-  - echo $LD_LIBRARY_PATH
-  - python -c "import lcm"
-  - julia -e "Pkg.add(\"PyCall\");"
-  - julia -e "using PyCall; @pyimport lcm as pylcm"
+  - sudo apt-get install python-dev python-numpy -y
 script:
   - julia -e 'versioninfo(); Pkg.init();'
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia -e 'Pkg.clone(pwd()); Pkg.build("PyLCM")'
+  - export PATH=$PATH:`julia -e "println(Pkg.dir(\"PyLCM\"))"`/deps/usr/bin
+  - lcm-gen -p test/multidim_array_t.lcm
+  - export PYTHONPATH=$PYTHONPATH:`pwd`
   - julia -e 'Pkg.test("PyLCM"; coverage=true)'
 after_success:
   - julia -e 'cd(Pkg.dir("PyLCM")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'

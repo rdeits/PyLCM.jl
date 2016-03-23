@@ -9,8 +9,8 @@ test_strings =  AbstractString["foo$(rand(Int32))" for i in 1:2, j in 1:size(tes
 
 global got_message = false
 
-@pyimport exlcm
-msg = exlcm.muldim_array_t()
+@pyimport lcm_test
+msg = lcm_test.multidimensional_array_t()
 msg[:size_a] = size(test_data, 1)
 msg[:size_b] = size(test_data, 2)
 msg[:size_c] = size(test_data, 3)
@@ -31,7 +31,7 @@ function handle_msg(channel, msg)
 	@test msg[:strarray] == test_strings
 end
 
-subscribe(lc, "TEST", handle_msg, exlcm.muldim_array_t)
+subscribe(lc, "TEST", handle_msg, lcm_test.multidimensional_array_t)
 publish(lc, "TEST", msg)
 handle(lc)
 @test got_message
@@ -40,7 +40,7 @@ global decoded_message = false
 
 function decode_and_handle_msg(channel, msg_data)
 	global decoded_message = true
-	msg = exlcm.muldim_array_t[:decode](msg_data)
+	msg = lcm_test.multidimensional_array_t[:decode](msg_data)
 	for i = 1:size(test_data, 1)
 		for j = 1:size(test_data, 2)
 			for k = 1:size(test_data, 3)
