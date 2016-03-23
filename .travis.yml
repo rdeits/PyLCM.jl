@@ -28,7 +28,8 @@ script:
   - julia -e 'versioninfo(); Pkg.init();'
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia -e 'Pkg.clone(pwd()); Pkg.build("PyLCM")'
-  - export PATH=$PATH:`pwd`/deps/usr/bin
+  - export PATH=$PATH:`julia -E "Pkg.dir(\"PyLCM\")"`/deps/usr/bin
+  - echo $PATH
   - lcm-gen -p test/multidim_array_t.lcm
   # - travis/setup_lcm.sh
   - export PYTHONPATH=$PYTHONPATH:`pwd`
