@@ -25,7 +25,9 @@ script:
   - julia -e 'versioninfo(); Pkg.init();'
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia -e 'Pkg.clone(pwd()); Pkg.build("PyLCM")'
-  - travis/setup_lcm.sh
+  - export PATH=$PATH:`pwd`/deps/usr/bin
+  - lcm-gen -p test/multidim_array_t.lcm
+  # - travis/setup_lcm.sh
   - export PYTHONPATH=$PYTHONPATH:`pwd`
   - python -c "import lcm"
   - julia -e "Pkg.add(\"PyCall\");"

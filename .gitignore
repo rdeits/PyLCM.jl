@@ -1,4 +1,6 @@
 *.jl.cov
 *.jl.*.cov
 *.jl.mem
-exlcm
+deps/*
+!deps/build.jl
+
