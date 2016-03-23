@@ -29,13 +29,8 @@ script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia -e 'Pkg.clone(pwd()); Pkg.build("PyLCM")'
   - export PATH=$PATH:`julia -e "println(Pkg.dir(\"PyLCM\"))"`/deps/usr/bin
-  - echo $PATH
   - lcm-gen -p test/multidim_array_t.lcm
-  # - travis/setup_lcm.sh
   - export PYTHONPATH=$PYTHONPATH:`pwd`
-  - python -c "import lcm"
-  - julia -e "Pkg.add(\"PyCall\");"
-  - julia -e "using PyCall; @pyimport lcm as pylcm"
   - julia -e 'Pkg.test("PyLCM"; coverage=true)'
 after_success:
   - julia -e 'cd(Pkg.dir("PyLCM")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
