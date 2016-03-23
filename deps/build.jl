@@ -41,7 +41,7 @@ provides(SimpleBuild,
     end), lcm, onload="""
 using PyCall
 @pyimport sys
-unshift!(PyVector(pyimport("sys")["path"]), joinpath("$(prefix)", "lib", "python" * string(sys.version_info[:major]) * "." * string(sys.version_info[:minor]), "site-packages"))
+unshift!(PyVector(pyimport("sys")["path"]), joinpath("$(prefix)", "lib", "python" * string(sys.version_info[1]) * "." * string(sys.version_info[2]), "site-packages"))
 """
 )
 
