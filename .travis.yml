@@ -26,9 +26,6 @@ script:
   - julia -e 'versioninfo(); Pkg.init();'
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia -e 'Pkg.clone(pwd()); Pkg.build("PyLCM")'
-  - export PATH=$PATH:`julia -e "println(Pkg.dir(\"PyLCM\"))"`/deps/usr/bin
-  - lcm-gen -p test/multidim_array_t.lcm
-  - export PYTHONPATH=$PYTHONPATH:`pwd`
   - julia -e 'Pkg.test("PyLCM"; coverage=true)'
 after_success:
   - julia -e 'cd(Pkg.dir("PyLCM")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'

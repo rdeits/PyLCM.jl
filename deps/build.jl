@@ -38,6 +38,10 @@ provides(SimpleBuild,
             MakeTargets(".", [])
             MakeTargets(".", ["install"])
         end
+        @build_steps begin
+            ChangeDirectory(joinpath(BinDeps.depsdir(lcm), ".."))
+            `$(joinpath(prefix, "bin", "lcm-gen")) -p test/multidim_array_t.lcm`
+        end
     end), lcm, onload="""
 using PyCall
 @pyimport sys

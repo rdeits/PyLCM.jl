@@ -1,4 +1,4 @@
-package lcm_test;
+package pylcm_test_message;
 
 struct multidimensional_array_t
 {
