@@ -7,7 +7,7 @@ PyLCM provides an interface to the [Lightweight Communications and Marshalling (
 
 # Installation
 
-You'll need to install the LCM package (which includes its Python bindings) yourself. Instructions can be found here: <https://lcm-proj.github.io/>
+If you have a systemwide installation of LCM, PyLCM will try to use it. If you don't, then running `Pkg.build("PyLCM")` will download and install a private copy of LCM and the python bindings for you.
 
 # Usage
 
@@ -62,4 +62,3 @@ while true
     handle(lc)
 end
 ```
-
