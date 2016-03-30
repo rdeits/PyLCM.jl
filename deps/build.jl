@@ -26,23 +26,10 @@ provides(Yum,
     Dict("glib" => gobject))
 
 provides(Sources,
-    URI("https://github.com/lcm-proj/lcm/releases/download/v1.3.0/lcm-1.3.0.zip"),
+    URI("https://github.com/lcm-proj/lcm/releases/download/v1.3.1/lcm-1.3.1.zip"),
     lcm)
 
-provides(SimpleBuild,
-    (@build_steps begin
-        GetSources(lcm)
-        @build_steps begin
-            ChangeDirectory(joinpath(BinDeps.depsdir(lcm), "src", "lcm-1.3.0"))
-            `./configure --prefix=$(prefix) --with-java=no` # disable java due to https://github.com/lcm-proj/lcm/issues/56
-            MakeTargets(".", [])
-            MakeTargets(".", ["install"])
-        end
-        @build_steps begin
-            ChangeDirectory(joinpath(BinDeps.depsdir(lcm), ".."))
-            `$(joinpath(prefix, "bin", "lcm-gen")) -p test/multidim_array_t.lcm`
-        end
-    end), lcm, onload="""
+provides(BuildProcess, Dict(Autotools(libtarget="lcm/liblcm.la") => lcm), onload="""
 using PyCall
 @pyimport sys
 unshift!(PyVector(pyimport("sys")["path"]), joinpath("$(prefix)", "lib", "python" * string(sys.version_info[1]) * "." * string(sys.version_info[2]), "site-packages"))

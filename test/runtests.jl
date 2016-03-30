@@ -2,7 +2,7 @@ using PyLCM
 using Base.Test
 
 using PyCall
-unshift!(PyVector(pyimport("sys")["path"]), "..")
+unshift!(PyVector(pyimport("sys")["path"]), ".")
 
 test_data = rand(Int32, 2, 3, 4)
 test_strings =  AbstractString["foo$(rand(Int32))" for i in 1:2, j in 1:size(test_data, 3)]
