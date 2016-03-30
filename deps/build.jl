@@ -36,9 +36,4 @@ unshift!(PyVector(pyimport("sys")["path"]), joinpath("$(prefix)", "lib", "python
 """
 )
 
-begin
-    cd(joinpath(BinDeps.depsdir(lcm), ".."))
-    run(`$(joinpath(prefix, "bin", "lcm-gen")) -p test/multidim_array_t.lcm`)
-end
-
 @BinDeps.install Dict(:lcm => :liblcm)
