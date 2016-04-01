@@ -1,31 +1,11 @@
-language: python
-sudo: required
-dist: precise
+language: julia
 os:
-    - linux
-python:
-    - 2.7
-compiler:
-  - clang
-env:
-  matrix:
-    - JULIAVERSION="juliareleases"
-    - JULIAVERSION="julianightlies"
+  - linux
+julia:
+  - release
+  - nightly
 notifications:
   email: false
-branches:
-  only:
-    - master
-before_install:
-  - sudo add-apt-repository ppa:staticfloat/julia-deps -y
-  - sudo add-apt-repository ppa:staticfloat/${JULIAVERSION} -y
-  - sudo apt-get update -qq -y
-  - sudo apt-get install libpcre3-dev julia -y
-  - sudo apt-get install python-dev python-numpy -y
-script:
-  - julia -e 'versioninfo(); Pkg.init();'
-  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia -e 'Pkg.clone(pwd()); Pkg.build("PyLCM")'
-  - julia -e 'Pkg.test("PyLCM"; coverage=true)'
+
 after_success:
   - julia -e 'cd(Pkg.dir("PyLCM")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'

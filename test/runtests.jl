@@ -1,6 +1,7 @@
 using PyLCM
 using Base.Test
 
+# We need to add the current folder to the python path so it will pick up our message type
 using PyCall
 unshift!(PyVector(pyimport("sys")["path"]), ".")
 
