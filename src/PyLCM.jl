@@ -5,7 +5,7 @@ isfile(depsjl) ? include(depsjl) : error("PyLCM not properly ",
     "installed. Please run\nPkg.build(\"PyLCM\")")
 
 using PyCall
-export LCM, publish, subscribe, handle, pyimport
+export LCM, publish, subscribe, handle, @pyimport
 
 immutable LCM
 	lcm_obj::PyObject
