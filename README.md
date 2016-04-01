@@ -17,6 +17,7 @@ If you have a systemwide installation of LCM, PyLCM will try to use it. If you d
 using PyLCM
 lc = LCM()
 ```
+
 ### Constructing a message:
 (this assumes that you have run `lcm-gen` and that the `exlcm` package is in your `PYTHONPATH`)
 
