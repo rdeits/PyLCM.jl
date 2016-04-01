@@ -4,9 +4,8 @@ depsjl = joinpath(dirname(@__FILE__), "..", "deps", "deps.jl")
 isfile(depsjl) ? include(depsjl) : error("PyLCM not properly ",
     "installed. Please run\nPkg.build(\"PyLCM\")")
 
-export LCM, publish, subscribe, handle
-
 using PyCall
+export LCM, publish, subscribe, handle, pyimport
 
 immutable LCM
 	lcm_obj::PyObject
