@@ -18,8 +18,10 @@ using PyLCM
 lc = LCM()
 ```
 ### Constructing a message:
+(this assumes that you have run `lcm-gen` and that the `exlcm` package is in your `PYTHONPATH`)
 
 ```julia
+@pyimport exlcm
 msg = exlcm.example_t()
 msg[:timestamp] = 12345
 msg[:enabled] = true
