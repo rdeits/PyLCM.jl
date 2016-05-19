@@ -31,8 +31,8 @@ provides(Sources,
 
 provides(BuildProcess, Dict(Autotools(libtarget="lcm/liblcm.la") => lcm), onload="""
 using PyCall
-@pyimport sys
-unshift!(PyVector(pyimport("sys")["path"]), joinpath("$(prefix)", "lib", "python" * string(sys.version_info[1]) * "." * string(sys.version_info[2]), "site-packages"))
+sys = pyimport("sys")
+unshift!(PyVector(sys["path"]), joinpath("$(prefix)", "lib", "python" * string(sys[:version_info][1]) * "." * string(sys[:version_info][2]), "site-packages"))
 """
 )
 

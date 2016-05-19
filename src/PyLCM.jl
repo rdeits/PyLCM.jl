@@ -5,6 +5,8 @@ module PyLCM
 using PyCall
 export LCM, publish, subscribe, handle, @pyimport
 
+const pylcm = PyNULL()
+
 immutable LCM
 	lcm_obj::PyObject
 
@@ -31,7 +33,7 @@ function __init__()
 	depsjl = joinpath(dirname(@__FILE__), "..", "deps", "deps.jl")
 	isfile(depsjl) ? include(depsjl) : error("PyLCM not properly ",
 	    "installed. Please run\nPkg.build(\"PyLCM\")")
-	const global pylcm = pyimport("lcm")
+    copy!(pylcm, pyimport("lcm"))
 end
 
 end # module
