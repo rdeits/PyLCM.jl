@@ -1,9 +1,5 @@
 module PyLCM
 
-depsjl = joinpath(dirname(@__FILE__), "..", "deps", "deps.jl")
-isfile(depsjl) ? include(depsjl) : error("PyLCM not properly ",
-    "installed. Please run\nPkg.build(\"PyLCM\")")
-
 using PyCall
 export LCM, publish, subscribe, handle, @pyimport
 
@@ -30,6 +26,9 @@ function handle(lc::LCM)
 end
 
 function __init__()
+	depsjl = joinpath(dirname(@__FILE__), "..", "deps", "deps.jl")
+	isfile(depsjl) ? include(depsjl) : error("PyLCM not properly ",
+	    "installed. Please run\nPkg.build(\"PyLCM\")")
 	const global pylcm = pyimport("lcm")
 end
 
