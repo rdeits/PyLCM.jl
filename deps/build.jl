@@ -39,9 +39,8 @@ prefix = joinpath(BinDeps.depsdir(lcm), "usr")
     end
     using Homebrew
     provides(Homebrew.HB, "glib", glib, os=:Darwin)
-    pkg_config_path = joinpath(Homebrew.prefix(), "lib", "pkgconfig")
-    ENV["PKG_CONFIG_PATH"] = get(ENV, "PKG_CONFIG_PATH", "") * pkg_config_path
-    ENV["INCLUDE_PATH"] = get(ENV, "INCLUDE_PATH", "") * joinpath(Homebrew.prefix(), "include")
+    ENV["PKG_CONFIG_PATH"] = get(ENV, "PKG_CONFIG_PATH", "") * ":" * joinpath(Homebrew.prefix(), "lib", "pkgconfig")
+    ENV["INCLUDE_PATH"] = get(ENV, "INCLUDE_PATH", "") * ":" * joinpath(Homebrew.prefix(), "include")
 end
 
 provides(Yum,
