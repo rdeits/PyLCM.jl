@@ -20,6 +20,15 @@ prefix = joinpath(BinDeps.depsdir(lcm), "usr")
     ENV["INCLUDE_PATH"] = get(ENV, "INCLUDE_PATH", "") * joinpath(Homebrew.prefix(), "include")
 end
 
+@linux_only begin
+    try
+        run(`pkg-config --exists glib-2.0`)
+    catch ErrorException
+        ENV["GLIB_CFLAGS"] = "-I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include"
+        ENV["GLIB_LIBS"] = "-lglib-2.0"
+    end
+end
+
 provides(AptGet, Dict("libglib2.0-dev" => glib))
 
 provides(Yum,
