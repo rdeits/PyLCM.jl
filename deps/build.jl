@@ -3,10 +3,34 @@ using Compat
 
 @BinDeps.setup
 
-deps = [
-    glib = library_dependency("glib", aliases = ["libglib-2.0-0", "libglib-2.0", "libglib-2.0.so.0"])
-    lcm = library_dependency("lcm", aliases=["liblcm", "liblcm.1"], depends=[glib])
-]
+function cflags_validator(pkg_name)
+    return (name, handle) -> begin
+        try
+            run(`pkg-config --cflags $(pkg_name)`)
+            return true
+        catch ErrorException
+            return false
+        end
+    end
+end
+
+@linux? (
+    begin
+        deps = [
+            python = library_dependency("python", aliases=["libpython2.7.so", "libpython3.2.so", "libpython3.3.so", "libpython3.4.so", "libpython3.5.so", "libpython3.6.so", "libpython3.7.so"], validate=cflags_validator("python"))
+            glib = library_dependency("glib", aliases=["libglib-2.0-0", "libglib-2.0", "libglib-2.0.so.0"], depends=[python], validate=cflags_validator("glib-2.0"))
+            lcm = library_dependency("lcm", aliases=["liblcm", "liblcm.1"], depends=[glib])
+
+            provides(AptGet, Dict("python-dev" => python, "libglib2.0-dev" => glib))
+        ]
+    end
+    : begin
+        deps = [
+            glib = library_dependency("glib", aliases = ["libglib-2.0-0", "libglib-2.0", "libglib-2.0.so.0"])
+            lcm = library_dependency("lcm", aliases=["liblcm", "liblcm.1"], depends=[glib])
+        ]
+    end
+    )
 
 prefix = joinpath(BinDeps.depsdir(lcm), "usr")
 @osx_only begin
@@ -19,8 +43,6 @@ prefix = joinpath(BinDeps.depsdir(lcm), "usr")
     ENV["PKG_CONFIG_PATH"] = get(ENV, "PKG_CONFIG_PATH", "") * pkg_config_path
     ENV["INCLUDE_PATH"] = get(ENV, "INCLUDE_PATH", "") * joinpath(Homebrew.prefix(), "include")
 end
-
-provides(AptGet, Dict("libglib2.0-dev" => glib))
 
 provides(Yum,
     Dict("glib" => glib))
