@@ -33,14 +33,16 @@ end
     )
 
 prefix = joinpath(BinDeps.depsdir(lcm), "usr")
+pkg_config_dirs = AbstractString[]
+include_dirs = AbstractString[]
 @osx_only begin
     if Pkg.installed("Homebrew") === nothing
         error("Homebrew package not installed, please run Pkg.add(\"Homebrew\")")
     end
     using Homebrew
     provides(Homebrew.HB, "glib", glib, os=:Darwin)
-    ENV["PKG_CONFIG_PATH"] = get(ENV, "PKG_CONFIG_PATH", "") * ":" * joinpath(Homebrew.prefix(), "lib", "pkgconfig")
-    ENV["INCLUDE_PATH"] = get(ENV, "INCLUDE_PATH", "") * ":" * joinpath(Homebrew.prefix(), "include")
+    push!(pkg_config_dirs, joinpath(Homebrew.prefix(), "lib", "pkgconfig"))
+    push!(include_dirs, joinpath(Homebrew.prefix(), "include"))
 end
 
 provides(Yum,
@@ -50,7 +52,7 @@ provides(Sources,
     URI("https://github.com/lcm-proj/lcm/releases/download/v1.3.1/lcm-1.3.1.zip"),
     lcm)
 
-provides(BuildProcess, Dict(Autotools(libtarget="lcm/liblcm.la") => lcm), onload="""
+provides(BuildProcess, Dict(Autotools(libtarget="lcm/liblcm.la", include_dirs=include_dirs, pkg_config_dirs=pkg_config_dirs) => lcm), onload="""
 using PyCall
 sys = pyimport("sys")
 unshift!(PyVector(sys["path"]), joinpath("$(prefix)", "lib", "python" * string(sys[:version_info][1]) * "." * string(sys[:version_info][2]), "site-packages"))
