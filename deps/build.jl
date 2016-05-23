@@ -3,21 +3,22 @@ using Compat
 
 @BinDeps.setup
 
-deps = [
-    glib = library_dependency("glib", aliases = ["libglib-2.0-0", "libglib-2.0", "libglib-2.0.so.0"])
-    lcm = library_dependency("lcm", aliases=["liblcm", "liblcm.1"], depends=[glib])
-]
-
 # Be specific about which libglib-2.0 we're looking for, since lcm actually
 # needs libglib-2.0-dev.
 @linux? ( begin
-              push!(deps, glib = library_dependency("glib", aliases = ["/usr/lib/x86_64-linux-gnu/libglib-2.0.so"]))
+              glib = library_dependency("glib", aliases = ["/usr/lib/x86_64-linux-gnu/libglib-2.0.so"])
           end
         : begin
-              push!(deps, glib = library_dependency("glib", aliases = ["libglib-2.0-0", "libglib-2.0", "libglib-2.0.so.0"]))
+              glib = library_dependency("glib", aliases = ["libglib-2.0-0", "libglib-2.0", "libglib-2.0.so.0"])
           end
         )
-        
+
+deps = [
+    glib
+    lcm = library_dependency("lcm", aliases=["liblcm", "liblcm.1"], depends=[glib])
+]
+
+
 prefix = joinpath(BinDeps.depsdir(lcm), "usr")
 @osx_only begin
     if Pkg.installed("Homebrew") === nothing
