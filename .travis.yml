@@ -1,6 +1,7 @@
 language: julia
 os:
   - linux
+  - osx
 julia:
   - release
   - nightly
@@ -9,3 +10,7 @@ notifications:
 
 after_success:
   - julia -e 'cd(Pkg.dir("PyLCM")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
+
+matrix:
+  allow_failures:
+    - julia: nightly
