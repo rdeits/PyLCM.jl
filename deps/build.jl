@@ -38,8 +38,11 @@ cmake_arguments = String[]
     end
     using Homebrew
     provides(Homebrew.HB, "glib", glib, os=:Darwin)
-    homebrew_library_dir = joinpath(Pkg.dir("Homebrew"), "deps", "usr", "lib")
-    push!(cmake_arguments,  "-DCMAKE_LIBRARY_PATH=$(homebrew_library_dir)")
+    push!(cmake_arguments,
+        "-DCMAKE_LIBRARY_PATH=$(joinpath(Pkg.dir("Homebrew"), "deps", "usr", "lib"))")
+    push!(cmake_arguments,
+        "-DCMAKE_INCLUDE_PATH=$(joinpath(Pkg.dir("Homebrew"), "deps", "usr", "include"))")
+
 end
 
 provides(Yum,
@@ -62,7 +65,7 @@ provides(BuildProcess,
         CreateDirectory(lcm_builddir)
         @build_steps begin
             ChangeDirectory(lcm_builddir)
-            `cmake -DCMAKE_INSTALL_PREFIX="$(prefix)" $(lcm_srcdir) $(join(cmake_arguments, ' '))`
+            `cmake -DCMAKE_INSTALL_PREFIX="$(prefix)" $(join(cmake_arguments, ' ')) $(lcm_srcdir)`
             `cmake --build . --target install`
         end
     end),
