@@ -31,16 +31,16 @@ end
 
 prefix = joinpath(BinDeps.depsdir(lcm), "usr")
 
-cmake_arguments = String[]
+lcm_cmake_arguments = String[]
 @static if is_apple()
     if Pkg.installed("Homebrew") === nothing
         error("Homebrew package not installed, please run Pkg.add(\"Homebrew\")")
     end
     using Homebrew
     provides(Homebrew.HB, "glib", glib, os=:Darwin)
-    push!(cmake_arguments,
+    push!(lcm_cmake_arguments,
         "-DCMAKE_LIBRARY_PATH=$(joinpath(Pkg.dir("Homebrew"), "deps", "usr", "lib"))")
-    push!(cmake_arguments,
+    push!(lcm_cmake_arguments,
         "-DCMAKE_INCLUDE_PATH=$(joinpath(Pkg.dir("Homebrew"), "deps", "usr", "include"))")
 
 end
@@ -58,6 +58,11 @@ provides(Sources,
 
 lcm_builddir = joinpath(BinDeps.depsdir(lcm), "builds", "lcm")
 lcm_srcdir = joinpath(BinDeps.depsdir(lcm), "src", lcm_folder)
+lcm_cmake_command = `cmake -DCMAKE_INSTALL_PREFIX=$(prefix)`
+for arg in lcm_cmake_arguments
+    lcm_cmake_command = `$lcm_cmake_command $arg`
+end
+lcm_cmake_command = `$lcm_cmake_command $lcm_srcdir`
 
 provides(BuildProcess,
     (@build_steps begin
@@ -65,7 +70,7 @@ provides(BuildProcess,
         CreateDirectory(lcm_builddir)
         @build_steps begin
             ChangeDirectory(lcm_builddir)
-            `cmake -DCMAKE_INSTALL_PREFIX="$(prefix)" $(join(cmake_arguments, ' ')) $(lcm_srcdir)`
+            lcm_cmake_command
             `cmake --build . --target install`
         end
     end),
