@@ -30,8 +30,6 @@ else
 end
 
 prefix = joinpath(BinDeps.depsdir(lcm), "usr")
-pkg_config_dirs = AbstractString[]
-include_dirs = AbstractString[]
 
 @static if is_apple()
     if Pkg.installed("Homebrew") === nothing
@@ -39,8 +37,6 @@ include_dirs = AbstractString[]
     end
     using Homebrew
     provides(Homebrew.HB, "glib", glib, os=:Darwin)
-    push!(pkg_config_dirs, joinpath(Homebrew.prefix(), "lib", "pkgconfig"))
-    push!(include_dirs, joinpath(Homebrew.prefix(), "include"))
 end
 
 provides(Yum,
@@ -54,8 +50,9 @@ provides(Sources,
     lcm,
     unpacked_dir=lcm_folder)
 
-lcm_builddir = joinpath(BinDeps.depsdir(lcm), "build")
+lcm_builddir = joinpath(BinDeps.depsdir(lcm), "builds", "lcm")
 lcm_srcdir = joinpath(BinDeps.depsdir(lcm), "src", lcm_folder)
+homebrew_library_dir = joinpath(BinDeps.depsdir("Homebrew"), "usr", "lib")
 
 provides(BuildProcess,
     (@build_steps begin
@@ -63,7 +60,7 @@ provides(BuildProcess,
         CreateDirectory(lcm_builddir)
         @build_steps begin
             ChangeDirectory(lcm_builddir)
-            `cmake -DCMAKE_INSTALL_PREFIX="$(prefix)" $(lcm_srcdir)`
+            `cmake -DCMAKE_INSTALL_PREFIX="$(prefix)" $(lcm_srcdir) -DCMAKE_LIBRARY_PATH=$(homebrew_library_dir)`
             `cmake --build . --target install`
         end
     end),
