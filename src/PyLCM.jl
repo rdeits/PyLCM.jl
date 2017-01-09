@@ -2,6 +2,7 @@ VERSION >= v"0.4.0-dev+6521" && __precompile__()
 
 module PyLCM
 
+using Base.Dates: Period, Millisecond
 using PyCall
 export LCM, publish, subscribe, handle, @pyimport
 
@@ -25,8 +26,29 @@ function subscribe(lc::LCM, channel::AbstractString, handler::Function, msg_type
 	lc.lcm_obj[:subscribe](channel, pyeval("lambda chan, data, handler=h, msg_type=t: handler(chan, msg_type.decode(data))", h=handler, t=msg_type))
 end
 
+"Wait for and dispatch the next incoming message"
 function handle(lc::LCM)
-	pycall(lc.lcm_obj[:handle], PyObject)
+    pycall(lc.lcm_obj[:handle], PyObject)
+    nothing
+end
+
+"""
+    handle(lc, timeout)
+
+Wait for and dispatch the next incoming message, with a timeout expressed
+as any Base.Dates.Period type. For example:
+
+    handle(lc, Millisecond(10))
+
+or
+
+    handle(lc, Second(1))
+
+Returns true if a message was handled, false if the function timed out.
+"""
+function handle(lc::LCM, timeout::Period)
+    timeout_ms = convert(Int, convert(Millisecond, timeout))
+    convert(Bool, pycall(lc.lcm_obj[:handle_timeout], PyObject, timeout_ms))
 end
 
 function __init__()

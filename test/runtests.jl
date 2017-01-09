@@ -54,5 +54,5 @@ end
 
 subscribe(lc, "TEST_DECODE", decode_and_handle_msg)
 publish(lc, "TEST_DECODE", msg)
-handle(lc)
+handle(lc, Dates.Second(1))
 @test decoded_message
