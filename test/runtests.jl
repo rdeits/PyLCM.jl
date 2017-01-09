@@ -34,7 +34,7 @@ end
 
 subscribe(lc, "TEST", handle_msg, pylcm_test_message.multidimensional_array_t)
 publish(lc, "TEST", msg)
-handle(lc)
+@test handle(lc)
 @test got_message
 
 global decoded_message = false
@@ -54,5 +54,5 @@ end
 
 subscribe(lc, "TEST_DECODE", decode_and_handle_msg)
 publish(lc, "TEST_DECODE", msg)
-handle(lc, Dates.Second(1))
+@test handle(lc, Dates.Second(1))
 @test decoded_message

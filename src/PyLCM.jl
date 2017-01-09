@@ -1,4 +1,4 @@
-VERSION >= v"0.4.0-dev+6521" && __precompile__()
+__precompile__()
 
 module PyLCM
 
@@ -29,7 +29,7 @@ end
 "Wait for and dispatch the next incoming message"
 function handle(lc::LCM)
     pycall(lc.lcm_obj[:handle], PyObject)
-    nothing
+    true
 end
 
 """
