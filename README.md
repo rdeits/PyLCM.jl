@@ -3,11 +3,11 @@
 [![Build Status](https://travis-ci.org/rdeits/PyLCM.jl.svg?branch=master)](https://travis-ci.org/rdeits/PyLCM.jl)
 [![codecov.io](https://codecov.io/github/rdeits/PyLCM.jl/coverage.svg?branch=master)](https://codecov.io/github/rdeits/PyLCM.jl?branch=master)
 
-PyLCM provides an interface to the [Lightweight Communications and Marshalling (LCM) library](https://lcm-proj.github.io/) in Julia. It wraps the LCM Python interface using [PyCall](https://github.com/stevengj/PyCall.jl), so it will be slower than calling the LCM C-API directly.
+PyLCM provides an interface to the [Lightweight Communications and Marshalling (LCM) library](https://lcm-proj.github.io/) in Julia. Most of the functionality is provided by [LCMCore.jl](https://github.com/rdeits/LCMCore.jl), which interacts with LCM through its C API. PyLCM builds on LCMCore by allowing you to send and receive Python LCM types from Julia.
 
 # Installation
 
-If you have a systemwide installation of LCM, PyLCM will try to use it. If you don't, then running `Pkg.build("PyLCM")` will download and install a private copy of LCM and the python bindings for you.
+If you have a systemwide installation of LCM, PyLCM will try to use it. If you don't, then running `Pkg.build("LCMCore")` will download and install a private copy of LCM and the python bindings for you.
 
 # Usage
 
@@ -62,6 +62,16 @@ end
 # Pass the exlcm.example_t type in to subscribe() to have message data automatically decoded
 subscribe(lc, "MY_CHANNEL", handle_msg, exlcm.example_t)
 while true
+    handle(lc)
+end
+```
+
+### Asynchronously handling messages
+
+Creating an asynchronous handler just requires the `@async` macro:
+
+```julia
+@async while true
     handle(lc)
 end
 ```

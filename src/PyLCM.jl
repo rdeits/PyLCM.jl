@@ -2,59 +2,35 @@ __precompile__()
 
 module PyLCM
 
-using Base.Dates: Period, Millisecond
 using PyCall
+using Base.Dates: Period, Millisecond
+using LCMCore
+import LCMCore: encode, subscribe, decode
+
 export LCM, publish, subscribe, handle, @pyimport
 
 const pylcm = PyNULL()
 
-immutable LCM
-	lcm_obj::PyObject
+# This is the only method required to enable publishing python
+# LCM messages
+encode(msg::PyObject) = pycall(msg[:encode], Vector{UInt8})
 
-	LCM() = new(pylcm[:LCM]())
-end
-
-function publish(lc::LCM, channel::AbstractString, msg)
-	pycall(lc.lcm_obj[:publish], PyAny, channel, pycall(msg[:encode], PyObject))
-end
-
-function subscribe(lc::LCM, channel::AbstractString, handler::Function)
-	lc.lcm_obj[:subscribe](channel, pyeval("lambda chan, data, handler=h: handler(chan, bytearray(data))", h=handler))
-end
-
-function subscribe(lc::LCM, channel::AbstractString, handler::Function, msg_type::PyObject)
-	lc.lcm_obj[:subscribe](channel, pyeval("lambda chan, data, handler=h, msg_type=t: handler(chan, msg_type.decode(data))", h=handler, t=msg_type))
-end
-
-"Wait for and dispatch the next incoming message"
-function handle(lc::LCM)
-    pycall(lc.lcm_obj[:handle], PyObject)
-    true
-end
-
-"""
-    handle(lc, timeout)
-
-Wait for and dispatch the next incoming message, with a timeout expressed
-as any Base.Dates.Period type. For example:
-
-    handle(lc, Millisecond(10))
-
-or
-
-    handle(lc, Second(1))
-
-Returns true if a message was handled, false if the function timed out.
-"""
-function handle(lc::LCM, timeout::Period)
-    timeout_ms = convert(Int, convert(Millisecond, timeout))
-    convert(Bool, pycall(lc.lcm_obj[:handle_timeout], PyObject, timeout_ms))
+# We override the subscribe() method that takes in a user-supplied
+# message type. That's because the method in LCMCore assumes that
+# the Julia type of the message is enough to determine how to
+# decode the message. That's not the case for PyLCM because all
+# python LCM types are just PyObjects. 
+function subscribe(lcm::LCM, channel::String, handler, msgtype::PyObject)
+    function inner_handler(channel, data)
+        pymsg = pycall(msgtype[:decode], PyObject, data)
+        handler(channel, pymsg)
+    end
+    subscribe(lcm, channel, inner_handler)
 end
 
 function __init__()
-	depsjl = joinpath(dirname(@__FILE__), "..", "deps", "deps.jl")
-	isfile(depsjl) ? include(depsjl) : error("PyLCM not properly ",
-	    "installed. Please run\nPkg.build(\"PyLCM\")")
+    sys = pyimport("sys")
+    unshift!(PyVector(sys["path"]), joinpath(LCMCore.lcm_prefix, "lib", "python" * string(sys[:version_info][1]) * "." * string(sys[:version_info][2]), "site-packages"))
     copy!(pylcm, pyimport("lcm"))
 end
 
