@@ -13,9 +13,5 @@ branches:
   only:
     - master
 
-before_install:
-  - julia -e 'Pkg.clone("https://github.com/rdeits/LCMCore.jl.git")'
-  - julia -e 'Pkg.build("LCMCore")'
-
 after_success:
   - julia -e 'cd(Pkg.dir("PyLCM")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
