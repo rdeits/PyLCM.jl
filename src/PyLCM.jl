@@ -30,7 +30,12 @@ end
 
 function __init__()
     sys = pyimport("sys")
-    unshift!(PyVector(sys["path"]), joinpath(LCMCore.lcm_prefix, "lib", "python" * string(sys[:version_info][1]) * "." * string(sys[:version_info][2]), "site-packages"))
+    if isdefined(LCMCore, :lcm_prefix)
+        lcm_prefix = LCMCore.lcm_prefix
+    else
+        lcm_prefix = dirname(dirname(LCMCore.liblcm))
+    end
+    unshift!(PyVector(sys["path"]), joinpath(lcm_prefix, "lib", "python" * string(sys[:version_info][1]) * "." * string(sys[:version_info][2]), "site-packages"))
     copy!(pylcm, pyimport("lcm"))
 end
 
