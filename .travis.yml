@@ -8,7 +8,7 @@ julia:
   - 0.5
   - nightly
 env:
-  - "PYTHON=`which python`
+  - PYTHON=`which python`
 notifications:
   email: false
 branches:
