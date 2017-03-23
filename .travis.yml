@@ -16,8 +16,5 @@ matrix:
   allow_failures:
     - julia: nightly
 
-before_install:
-  - export PYTHON=`which python`
-
 after_success:
   - julia -e 'cd(Pkg.dir("PyLCM")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
