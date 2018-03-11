@@ -17,7 +17,7 @@ cd(joinpath(Pkg.dir("LCMCore"), "deps", "builds", "lcm")) do
         end
     end
     if cmake_python_executable != normpath(PyCall.pyprogramname)
-        run(`cmake -UPYTHON* -DPYTHON_EXECUTABLE=$(normpath(PyCall.pyprogramname)) .`)
+        run(`cmake "-UPYTHON*" -DPYTHON_EXECUTABLE=$(normpath(PyCall.pyprogramname)) .`)
         run(`cmake --build . --target install`)
     end
 end
