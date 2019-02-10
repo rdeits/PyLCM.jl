@@ -3,6 +3,12 @@
 [![Build Status](https://travis-ci.org/rdeits/PyLCM.jl.svg?branch=master)](https://travis-ci.org/rdeits/PyLCM.jl)
 [![codecov.io](https://codecov.io/github/rdeits/PyLCM.jl/coverage.svg?branch=master)](https://codecov.io/github/rdeits/PyLCM.jl?branch=master)
 
+## Status: Deprecated
+
+The PyLCM.jl package is deprecated. The last Julia version that it supports is Julia v0.6. It will continue to work with Julia v0.6 in its current state, but it will not be upgraded to support Julia 1.0. For a more efficient and powerful way to generate native Julia interfaces to LCM messages, check out <https://github.com/JuliaRobotics/LCMCore.jl#complex-message-types>.
+
+## PyLCM
+
 PyLCM provides an interface to the [Lightweight Communications and Marshalling (LCM) library](https://lcm-proj.github.io/) in Julia. Most of the functionality is provided by [LCMCore.jl](https://github.com/rdeits/LCMCore.jl), which interacts with LCM through its C API. PyLCM builds on LCMCore by allowing you to send and receive Python LCM types from Julia.
 
 # Installation
